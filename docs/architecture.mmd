@@ -1,0 +1,12 @@
+```mermaid
+graph TD
+  subgraph GitHub/GitLab Repo
+    A[src & docs] -->|push| B[CI Runner]
+  end
+  B --> C[Lint]
+  B --> D[Test & Coverage]
+  B --> E[Docs Gen]
+  B --> F[Build]
+  F --> G[Pages Deploy]
+  R[Review Apps] --- G
+```
