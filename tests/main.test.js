@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
-import { add, greet } from '../dist/main.js';
+import { add, greet } from '../src/main.js';
 
 describe('main', () => {
   it('greet', () => {
