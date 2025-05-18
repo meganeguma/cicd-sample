@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 async function main() {
-  const src = await fs.readFile('src/main.ts', 'utf8');
+  const src = await fs.readFile('src/main.js', 'utf8');
   const lines = src.split('\n');
   const docLines = ['# API Documentation', ''];
   for (const line of lines) {

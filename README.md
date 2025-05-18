@@ -1,6 +1,6 @@
 # CI/CD Sample Project
 
-This repository demonstrates a minimal pipeline that works on both GitHub Actions and GitLab CI. It includes linting, testing with coverage, documentation generation, TypeScript build, and static site deployment.
+This repository demonstrates a minimal pipeline that works on both GitHub Actions and GitLab CI. It includes linting, testing with coverage, documentation generation, and static site deployment.
 
 ## Usage
 
