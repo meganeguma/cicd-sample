@@ -1,0 +1,31 @@
+{
+  "name": "cicd-sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node scripts/run-lint.mjs",
+    "test": "node --test --experimental-test-coverage",
+    "coverage": "node scripts/run-coverage.mjs",
+    "docs": "typedoc --plugin typedoc-plugin-markdown --out docs/api src || node scripts/generate-docs.mjs",
+    "build": "tsc && cp -R src public && cp -R docs public",
+    "pretest": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "prettier": "^3.0.0",
+    "c8": "^8.0.1",
+    "typedoc": "^0.25.0",
+    "typedoc-plugin-markdown": "^3.14.0",
+    "typescript": "^5.4.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  }
+}

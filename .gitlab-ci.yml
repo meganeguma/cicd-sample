@@ -1,0 +1,78 @@
+stages:
+  - lint
+  - test
+  - coverage
+  - build
+  - deploy
+
+lint:
+  stage: lint
+  image: node:lts
+  script:
+    - npm install
+    - npm run lint
+
+unit_test:
+  stage: test
+  image: node:lts
+  script:
+    - npm install
+    - npm test
+
+coverage:
+  stage: coverage
+  image: node:lts
+  script:
+    - npm install
+    - npm run coverage
+  artifacts:
+    paths:
+      - coverage
+
+build:
+  stage: build
+  image: node:lts
+  script:
+    - npm install
+    - npm run docs
+    - npm run build
+  artifacts:
+    paths:
+      - public
+
+review:
+  stage: deploy
+  image: node:lts
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    on_stop: stop_review
+  script:
+    - echo "Review app"
+  only:
+    - branches
+  except:
+    - main
+
+stop_review:
+  stage: deploy
+  image: node:lts
+  environment:
+    name: review/$CI_COMMIT_REF_SLUG
+    action: stop
+  script: []
+  when: manual
+  only:
+    - branches
+
+pages:
+  stage: deploy
+  image: node:lts
+  script:
+    - echo "Deploy pages"
+  artifacts:
+    paths:
+      - public
+  dependencies:
+    - build
+  only:
+    - main
