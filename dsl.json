@@ -1,0 +1,76 @@
+{
+  "version": "1.0",
+  "description": "Requirements definition document review workflow using guideline & checklist",
+  "start": {
+    "id": "start",
+    "type": "file_upload",
+    "label": "Requirements Definition Document (PDF/DOCX/Markdown)",
+    "variable": "reqDoc"
+  },
+  "nodes": [
+    {
+      "id": "split",
+      "type": "split_file",
+      "input": {
+        "file": "$reqDoc"
+      },
+      "params": {
+        "chunk_size": 4000,
+        "overlap": 200
+      }
+    },
+    {
+      "id": "loop",
+      "type": "loop",
+      "variable": "checkItem",
+      "source": "kb.checklist"  
+    },
+    {
+      "id": "retrieve",
+      "type": "knowledge_retrieval",
+      "input": {
+        "query": "$checkItem.title"
+      },
+      "filter": {
+        "metadata": {
+          "id": "$checkItem.id"
+        }
+      }
+    },
+    {
+      "id": "review",
+      "type": "llm",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "guideline_id": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+          "comment": { "type": "string" }
+        },
+        "required": ["guideline_id", "passed", "comment"]
+      },
+      "prompt": {
+        "system": "あなたは要件定義書レビューの専門家です。提供する『ガイドライン』と『チェックリスト項目』を必ず優先し、(1) 適合可否, (2) 重み付け（high/medium/low）, (3) 改善案 を JSON 形式で出力してください。",
+        "user": {
+          "doc_chunk": "$split.chunk",
+          "guideline": "$retrieve.content",
+          "checklist_item": "$checkItem"
+        }
+      }
+    },
+    {
+      "id": "collect",
+      "type": "merge_json",
+      "input": {
+        "json_objects": "$review.output"
+      }
+    }
+  ],
+  "end": {
+    "id": "output",
+    "type": "output",
+    "format": "json",
+    "data": "$collect.result"
+  }
+}
